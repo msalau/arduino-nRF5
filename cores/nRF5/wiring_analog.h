@@ -49,6 +49,42 @@ typedef enum _eAnalogReference
 } eAnalogReference ;
 #endif
 
+#if defined(NRF52_SERIES)
+/*
+ * \brief Acquisition time enumeration. To be used with \ref analogAcquisitionTime
+ */
+typedef enum _eAcquisitionTime
+{
+  AT_DEFAULT,
+  AT_3us,
+  AT_5us,
+  AT_10us,
+  AT_15us,
+  AT_20us,
+  AT_40us
+} eAcquisitionTime ;
+
+/*
+ * \brief Set the acquisition time of the ADC.
+ * Default value: 3us.
+ * Acquision time should match the maximum source resistance of the signal.
+ * See the '37.9 Acquisition time' chapter of the datasheet for more details.
+ *
+ * <table>
+ * <caption>Acquisition Time</caption>
+ * <tr><th>Acquisition Time<th>Maximum source resistance
+ * <tr><td>3us  <td>10kOhm
+ * <tr><td>5us  <td>40kOhm
+ * <tr><td>10us <td>100kOhm
+ * <tr><td>15us <td>200kOhm
+ * <tr><td>20us <td>400kOhm
+ * <tr><td>40us <td>800kOhm
+ * </table>
+ *
+ * \param ulMmode
+ */
+extern void analogAcquisitionTime( eAcquisitionTime ulMode );
+#endif
 
 /*
  * \brief Configures the reference voltage used for analog input (i.e. the value used as the top of the input range).

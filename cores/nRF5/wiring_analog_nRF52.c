@@ -28,6 +28,7 @@ extern "C" {
 
 static uint32_t saadcReference = SAADC_CH_CONFIG_REFSEL_Internal;
 static uint32_t saadcGain      = SAADC_CH_CONFIG_GAIN_Gain1_5;
+static uint32_t saadcAcqTime   = SAADC_CH_CONFIG_TACQ_3us;
 
 static NRF_PWM_Type* pwms[PWM_COUNT] = {
   NRF_PWM0,
@@ -97,6 +98,37 @@ void analogReference( eAnalogReference ulMode )
     case AR_VDD4:
       saadcReference = SAADC_CH_CONFIG_REFSEL_VDD1_4;
       saadcGain      = SAADC_CH_CONFIG_GAIN_Gain1_4;
+      break;
+  }
+}
+
+void analogAcquisitionTime( eAcquisitionTime ulMode )
+{
+  switch ( ulMode ) {
+    case AT_DEFAULT:
+    case AT_3us:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_3us;
+      break;
+
+    case AT_5us:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_5us;
+      break;
+
+    case AT_10us:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_10us;
+      break;
+
+    case AT_15us:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_15us;
+      break;
+
+    case AT_20us:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_20us;
+      break;
+
+    case AT_40us:
+    default:
+      saadcAcqTime = SAADC_CH_CONFIG_TACQ_40us;
       break;
   }
 }
@@ -176,7 +208,7 @@ uint32_t analogRead( uint32_t ulPin )
                             | ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESN_Pos)   & SAADC_CH_CONFIG_RESN_Msk)
                             | ((saadcGain                     << SAADC_CH_CONFIG_GAIN_Pos)   & SAADC_CH_CONFIG_GAIN_Msk)
                             | ((saadcReference                << SAADC_CH_CONFIG_REFSEL_Pos) & SAADC_CH_CONFIG_REFSEL_Msk)
-                            | ((SAADC_CH_CONFIG_TACQ_3us      << SAADC_CH_CONFIG_TACQ_Pos)   & SAADC_CH_CONFIG_TACQ_Msk)
+                            | ((saadcAcqTime                  << SAADC_CH_CONFIG_TACQ_Pos)   & SAADC_CH_CONFIG_TACQ_Msk)
                             | ((SAADC_CH_CONFIG_MODE_SE       << SAADC_CH_CONFIG_MODE_Pos)   & SAADC_CH_CONFIG_MODE_Msk);
   NRF_SAADC->CH[0].PSELN = pin;
   NRF_SAADC->CH[0].PSELP = pin;
